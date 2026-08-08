@@ -3,8 +3,10 @@
 Reads entries/**/*.md (YAML frontmatter + Markdown body) and renders
 styled HTML into dist/.
 """
-import glob, os, shutil, yaml, markdown
-from datetime import date
+import glob
+import os
+
+from scripts.content_parser import markdown_to_html, parse_document
 
 SEVERITY_COLOR = {
     "lethal": "#e05a4e",
@@ -59,10 +61,9 @@ def load_entries():
     entries = []
     for path in sorted(glob.glob("entries/**/*.md", recursive=True)):
         raw = open(path, encoding="utf-8").read()
-        _, fm_text, body = raw.split("---", 2)
-        fm = yaml.safe_load(fm_text)
+        fm, body = parse_document(raw)
         fm["slug"] = os.path.splitext(os.path.basename(path))[0]
-        fm["body_html"] = markdown.markdown(body.strip())
+        fm["body_html"] = markdown_to_html(body)
         entries.append(fm)
     return entries
 
