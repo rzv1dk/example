@@ -20,6 +20,29 @@ CATEGORY_LABEL = {
     "plant-toxin": "Plant Toxin",
     "chemical": "Chemical",
 }
+SECTION_LABEL = {
+    "snakes": "Snakes",
+    "spiders-scorpions": "Spiders & Scorpions",
+    "marine-life": "Marine Life",
+    "poisonous-plants": "Poisonous Plants",
+    "poisonous-mushrooms": "Poisonous Mushrooms",
+    "environmental-toxins": "Environmental Toxins",
+}
+
+SECTION_SLUGS = {
+    "black-mamba": "snakes",
+    "inland-taipan": "snakes",
+    "deathstalker-scorpion": "spiders-scorpions",
+    "blue-ringed-octopus": "marine-life",
+    "box-jellyfish": "marine-life",
+    "cone-snail": "marine-life",
+    "castor-bean-ricin": "poisonous-plants",
+    "oleander": "poisonous-plants",
+    "death-cap": "poisonous-mushrooms",
+    "carbon-monoxide": "environmental-toxins",
+    "cyanide": "environmental-toxins",
+    "methanol": "environmental-toxins",
+}
 
 CSS = """
 :root{
@@ -35,15 +58,38 @@ header{padding:28px 24px 8px;max-width:960px;margin:0 auto}
 .brand{font-size:22px;font-weight:700;letter-spacing:.01em}
 .brand span{color:var(--accent)}
 .tagline{color:var(--text2);font-size:14px;margin-top:4px}
+.site-nav{max-width:960px;margin:12px auto 0;padding:0 24px;display:flex;gap:6px;flex-wrap:wrap}
+.site-nav a{color:var(--text2);font-size:12px;padding:6px 9px;border-radius:7px;border:1px solid transparent}
+.site-nav a:hover{color:var(--text);border-color:var(--border);text-decoration:none;background:var(--surface)}
 .banner{max-width:960px;margin:16px auto 0;padding:10px 16px;
   background:#241d0f;border:1px solid var(--amber);border-radius:8px;
   color:var(--amber);font-size:13px}
 main{max-width:960px;margin:0 auto;padding:24px}
+.emergency{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin-bottom:30px;
+  padding:20px 22px;background:#211414;border:1px solid #8c453f;border-radius:12px}
+.eyebrow{margin:0 0 5px;color:#ef8b7f;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.emergency h1{margin:0;font-size:21px}
+.emergency p{margin:6px 0 0;color:#c8b9b5;font-size:13px;max-width:680px}
+.emergency-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.emergency-link{display:inline-flex;align-items:center;min-height:38px;padding:7px 12px;border-radius:8px;
+  border:1px solid #d56d62;color:#f4c2bc;font-size:12px;font-weight:700;white-space:nowrap}
+.emergency-link:hover{background:#321c1b;text-decoration:none}
+.directory{margin-bottom:30px}
+.section-heading{margin:0;font-size:22px}
+.section-intro{margin:6px 0 0;color:var(--text2);font-size:14px;max-width:720px}
+.browse-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.browse-card{min-height:104px;text-align:left;padding:15px;border:1px solid var(--border);border-radius:11px;
+  background:var(--surface);color:var(--text);cursor:pointer}
+.browse-card:hover{border-color:var(--accent);background:#192019}
+.browse-card strong{display:block;font-size:14px}
+.browse-card span{display:block;margin-top:4px;color:var(--text2);font-size:12px}
+.browse-count{margin-top:12px!important;color:var(--accent)!important;font-weight:650}
+.catalog{scroll-margin-top:16px}
 .catalog-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .catalog-heading h2{font-size:14px;color:var(--text2);font-weight:600;text-transform:uppercase;
   letter-spacing:.06em;margin:0}
 .result-count{color:var(--text2);font-size:12px}
-.search-panel{display:grid;grid-template-columns:minmax(220px,1fr) 180px 160px auto;
+.search-panel{display:grid;grid-template-columns:minmax(210px,1fr) 165px 145px 135px auto;
   gap:10px;margin-top:14px;padding:14px;background:var(--surface);border:1px solid var(--border);
   border-radius:12px}
 .field{display:flex;flex-direction:column;gap:5px}
@@ -82,13 +128,21 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;bord
   border:1px solid var(--accent);font-size:13px;font-weight:650}
 .action.secondary{border-color:var(--border);color:var(--text)}
 .action:hover{background:#20301f;text-decoration:none}
+.about-resource{margin-top:22px;padding:20px 22px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.about-resource h2{margin:0 0 7px;font-size:17px}
+.about-resource p{margin:0;color:var(--text2);font-size:13px}
+.about-resource p+p{margin-top:9px}
 ul{padding-left:20px}
 footer{max-width:960px;margin:40px auto 24px;padding:0 24px;color:var(--text2);font-size:12px}
 @media(max-width:720px){
+  .emergency{grid-template-columns:1fr}
+  .emergency-links{justify-content:flex-start}
+  .browse-grid{grid-template-columns:1fr 1fr}
   .search-panel{grid-template-columns:1fr 1fr}
   .field.search-field{grid-column:1/-1}
 }
 @media(max-width:480px){
+  .browse-grid{grid-template-columns:1fr}
   .search-panel{grid-template-columns:1fr}
   .field.search-field{grid-column:auto}
   .clear-button{width:100%}
@@ -108,6 +162,17 @@ def load_entries():
 def badge(text, color):
     return f'<span class="badge" style="color:{color};border-color:{color}66">{text}</span>'
 
+def browse_description(section):
+    descriptions = {
+        "snakes": "Venom, clinical effects, first aid and treatment context.",
+        "spiders-scorpions": "Terrestrial invertebrate bites and stings.",
+        "marine-life": "Jellyfish, molluscs and other marine envenomations.",
+        "poisonous-plants": "Plant toxins and accidental exposure risks.",
+        "poisonous-mushrooms": "Toxic fungi and delayed poisoning syndromes.",
+        "environmental-toxins": "Important non-biological toxic exposures.",
+    }
+    return descriptions.get(section, "Browse reference entries.")
+
 def page_shell(title, body_html):
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -116,6 +181,13 @@ def page_shell(title, body_html):
   <div class="brand">Tox<span>icology</span> Reference <span style="color:var(--text2);font-weight:400;font-size:13px">— example</span></div>
   <div class="tagline">A community-reviewed reference on poisons and venoms.</div>
 </header>
+<nav class="site-nav" aria-label="Primary navigation">
+  <a href="index.html#first-aid">First aid</a>
+  <a href="index.html#directory">Site directory</a>
+  <a href="index.html#catalog">Browse entries</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#get-involved">Get involved</a>
+</nav>
 <div class="banner">EXAMPLE CONTENT — this site demonstrates the design and publishing pipeline only. Entries are not verified for real-world use. In an actual poisoning or envenomation event, contact emergency services or a poison control center.</div>
 <main>{body_html}</main>
 <footer>Built from Markdown in this repo &middot; example of the GitHub + Cloudflare Pages setup</footer>
@@ -123,16 +195,21 @@ def page_shell(title, body_html):
 
 def render_index(entries):
     cards = ""
+    section_counts = {section: 0 for section in SECTION_LABEL}
     for e in entries:
         sev_color = SEVERITY_COLOR.get(e.get("severity"), "#9c9c94")
         excerpt = (e.get("mechanism_of_toxicity") or "")[:110] + "…"
+        section = SECTION_SLUGS.get(e["slug"], "environmental-toxins")
+        section_counts[section] += 1
         search_text = " ".join([
             e.get("common_name", ""), e.get("scientific_name", ""),
             CATEGORY_LABEL.get(e.get("category"), e.get("category", "")),
-            e.get("severity", ""), e.get("mechanism_of_toxicity", ""),
+            SECTION_LABEL.get(section, section), e.get("severity", ""),
+            e.get("mechanism_of_toxicity", ""),
         ]).lower()
         cards += f"""<a class="card" href="{e['slug']}.html"
   data-search="{html.escape(search_text, quote=True)}"
+  data-section="{section}"
   data-category="{html.escape(e.get('category', ''), quote=True)}"
   data-severity="{html.escape(e.get('severity', ''), quote=True)}">
   <h3>{e['common_name']}</h3>
@@ -143,14 +220,48 @@ def render_index(entries):
   </div>
   <p class="excerpt">{excerpt}</p>
 </a>"""
-    body = f"""<div class="catalog-heading">
-  <h2>All entries ({len(entries)})</h2>
+    browse_cards = "".join(
+        f"""<button class="browse-card" type="button" data-browse-section="{section}">
+  <strong>{label}</strong>
+  <span>{browse_description(section)}</span>
+  <span class="browse-count">{section_counts[section]} {"entry" if section_counts[section] == 1 else "entries"}</span>
+</button>"""
+        for section, label in SECTION_LABEL.items()
+    )
+    body = f"""<section class="emergency" id="first-aid" aria-labelledby="emergency-title">
+  <div>
+    <p class="eyebrow">Australian emergency guidance</p>
+    <h1 id="emergency-title">Need help now?</h1>
+    <p>If someone has collapsed, stopped breathing, had a seizure, or has a severe allergic reaction, call Triple Zero (000). For suspected poisoning without those emergency signs, call the Poisons Information Centre on 13 11 26.</p>
+  </div>
+  <div class="emergency-links">
+    <a class="emergency-link" href="tel:000">Call 000</a>
+    <a class="emergency-link" href="tel:131126">Poisons: 13 11 26</a>
+    <a class="emergency-link" href="https://www.healthdirect.gov.au/poisoning">Official guidance</a>
+  </div>
+</section>
+<section class="directory" id="directory" aria-labelledby="directory-title">
+  <p class="eyebrow" style="color:var(--accent)">Clinical toxinology directory</p>
+  <h2 class="section-heading" id="directory-title">Explore by source</h2>
+  <p class="section-intro">A modern directory based on the broad subject structure of the former Toxinology.com resource: venomous animals, poisonous organisms, plants, mushrooms, and practical clinical context.</p>
+  <div class="browse-grid">{browse_cards}</div>
+</section>
+<section class="catalog" id="catalog" aria-labelledby="catalog-title">
+<div class="catalog-heading">
+  <h2 id="catalog-title">All entries ({len(entries)})</h2>
   <span class="result-count" id="result-count" aria-live="polite">Showing all {len(entries)}</span>
 </div>
 <div class="search-panel" role="search" aria-label="Search toxicology entries">
   <div class="field search-field">
     <label for="entry-search">Search entries</label>
     <input id="entry-search" type="search" placeholder="Name, species, toxin or mechanism…" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="section-filter">Area</label>
+    <select id="section-filter">
+      <option value="">All areas</option>
+      {''.join(f'<option value="{section}">{label}</option>' for section, label in SECTION_LABEL.items())}
+    </select>
   </div>
   <div class="field">
     <label for="category-filter">Category</label>
@@ -175,7 +286,8 @@ def render_index(entries):
 </div>
 <div class="grid" id="entry-grid">{cards}</div>
 <p class="empty-state" id="empty-state">No entries match those filters. Try a broader search.</p>
-<section class="get-involved" aria-labelledby="get-involved-title">
+</section>
+<section class="get-involved" id="get-involved" aria-labelledby="get-involved-title">
   <h2 id="get-involved-title">Get involved</h2>
   <p>Help improve the reference by suggesting a subject, reporting a correction, or sending feedback directly to the webmaster. Each message is tracked publicly so progress is easy to follow.</p>
   <div class="actions">
@@ -185,9 +297,15 @@ def render_index(entries):
     <a class="action secondary" href="https://github.com/rzv1dk/example">View the project</a>
   </div>
 </section>
+<section class="about-resource" id="about" aria-labelledby="about-title">
+  <h2 id="about-title">About this rebuild</h2>
+  <p>The former Clinical Toxinology Resources website was created as a searchable global reference covering venomous snakes, spiders, scorpions, marine organisms, poisonous plants and mushrooms, antivenoms, and clinical management. This independent example rebuild preserves that broad directory concept in a current, accessible interface.</p>
+  <p>It is not an official replacement, is not affiliated with the University of Adelaide or Women’s and Children’s Hospital, and currently contains only twelve demonstration entries. Historical context: <a href="https://www.mja.com.au/journal/2002/177/11/wwwtoxinologycom">Medical Journal of Australia overview</a>.</p>
+</section>
 <script>
 (() => {{
   const search = document.querySelector('#entry-search');
+  const section = document.querySelector('#section-filter');
   const category = document.querySelector('#category-filter');
   const severity = document.querySelector('#severity-filter');
   const cards = [...document.querySelectorAll('.card')];
@@ -199,6 +317,7 @@ def render_index(entries):
     let visible = 0;
     cards.forEach(card => {{
       const matches = (!query || card.dataset.search.includes(query)) &&
+        (!section.value || card.dataset.section === section.value) &&
         (!category.value || card.dataset.category === category.value) &&
         (!severity.value || card.dataset.severity === severity.value);
       card.hidden = !matches;
@@ -209,14 +328,26 @@ def render_index(entries):
   }}
 
   search.addEventListener('input', applyFilters);
+  section.addEventListener('change', applyFilters);
   category.addEventListener('change', applyFilters);
   severity.addEventListener('change', applyFilters);
   document.querySelector('#clear-filters').addEventListener('click', () => {{
     search.value = '';
+    section.value = '';
     category.value = '';
     severity.value = '';
     applyFilters();
     search.focus();
+  }});
+  document.querySelectorAll('[data-browse-section]').forEach(button => {{
+    button.addEventListener('click', () => {{
+      search.value = '';
+      section.value = button.dataset.browseSection;
+      category.value = '';
+      severity.value = '';
+      applyFilters();
+      document.querySelector('#catalog').scrollIntoView({{behavior: 'smooth', block: 'start'}});
+    }});
   }});
 }})();
 </script>"""
