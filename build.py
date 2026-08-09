@@ -19,6 +19,8 @@ CATEGORY_LABEL = {
     "venom": "Venom",
     "plant-toxin": "Plant Toxin",
     "chemical": "Chemical",
+    "pesticide": "Pesticide",
+    "mushroom": "Mushroom",
 }
 SECTION_LABEL = {
     "snakes": "Snakes",
@@ -89,7 +91,7 @@ main{max-width:960px;margin:0 auto;padding:24px}
 .catalog-heading h2{font-size:14px;color:var(--text2);font-weight:600;text-transform:uppercase;
   letter-spacing:.06em;margin:0}
 .result-count{color:var(--text2);font-size:12px}
-.search-panel{display:grid;grid-template-columns:minmax(210px,1fr) 165px 145px 135px auto;
+.search-panel{display:grid;grid-template-columns:minmax(160px,1fr) 130px 115px 115px 155px 70px;
   gap:10px;margin-top:14px;padding:14px;background:var(--surface);border:1px solid var(--border);
   border-radius:12px}
 .field{display:flex;flex-direction:column;gap:5px}
@@ -101,10 +103,20 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;bord
 .clear-button{align-self:end;height:40px;border:1px solid var(--border);border-radius:8px;
   padding:0 14px;background:var(--surface2);color:var(--text);cursor:pointer}
 .clear-button:hover{border-color:var(--accent)}
+.image-toggle{align-self:end;height:40px;display:flex;align-items:center;gap:8px;padding:0 11px;
+  border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text2);
+  font-size:12px;font-weight:650;cursor:pointer;white-space:nowrap}
+.image-toggle:hover{border-color:var(--accent);color:var(--text)}
+.image-toggle input{width:18px;height:18px;margin:0;accent-color:var(--accent);cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;display:block}
 .card:hover{border-color:var(--accent);text-decoration:none}
 .card[hidden]{display:none}
+.card-art{display:none;width:100%;height:72px;margin:0 0 14px;border:1px solid var(--border);
+  border-radius:9px;background:linear-gradient(135deg,#20251f,#111411);overflow:hidden}
+body.show-card-art .card-art{display:block}
+.card-art .line{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.card-art .fill{fill:currentColor;opacity:.14}
 .card h3{margin:0 0 2px;font-size:16px;color:var(--text)}
 .sci{color:var(--text2);font-style:italic;font-size:12.5px;margin:0 0 10px}
 .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
@@ -162,6 +174,36 @@ def load_entries():
 def badge(text, color):
     return f'<span class="badge" style="color:{color};border-color:{color}66">{text}</span>'
 
+def entry_section(entry):
+    """Place entries in the broad directory areas used by the home page."""
+    slug = entry["slug"]
+    category = entry.get("category")
+    if category == "mushroom":
+        return "poisonous-mushrooms"
+    if category == "plant-toxin":
+        return "poisonous-plants"
+    if slug in {"deathstalker-scorpion", "sydney-funnel-web-spider", "redback-spider", "mouse-spider"}:
+        return "spiders-scorpions"
+    if slug in {"blue-ringed-octopus", "box-jellyfish", "cone-snail", "stonefish",
+                "irukandji-jellyfish", "bluebottle"}:
+        return "marine-life"
+    if category == "venom":
+        return "snakes"
+    return SECTION_SLUGS.get(slug, "environmental-toxins")
+
+def section_art(section):
+    """Small inline illustrations: lightweight, accessible, and dependency-free."""
+    art = {
+        "snakes": ('#7fd858', '<path class="line" d="M18 39c15-24 35 17 52-5s32-5 32 8c0 9-11 11-18 5"/><circle cx="101" cy="32" r="2.5" fill="currentColor"/>'),
+        "spiders-scorpions": ('#d8c869', '<ellipse class="fill" cx="60" cy="31" rx="13" ry="14"/><circle class="line" cx="60" cy="25" r="7"/><path class="line" d="M48 27 35 18m13 14-16-1m17 8-14 9m37-21 13-9M72 32l16-1m-17 8 14 9"/>'),
+        "marine-life": ('#69b7d8', '<path class="fill" d="M43 32c0-15 8-22 17-22s17 7 17 22Z"/><path class="line" d="M43 32c0-15 8-22 17-22s17 7 17 22m-12 0c0 12-8 8-8 19m20-19c0 12 8 8 8 19M32 49c9-6 18 6 27 0s18 6 29 0"/>'),
+        "poisonous-plants": ('#7fd858', '<path class="fill" d="M60 47C36 41 31 18 33 13c18 0 30 10 27 34Zm1 0c24-6 29-29 27-34-18 0-30 10-27 34Z"/><path class="line" d="M60 51V24m0 18L43 25m18 16 17-17"/>'),
+        "poisonous-mushrooms": ('#e0a72e', '<path class="fill" d="M28 31C31 13 44 8 60 8s29 5 32 23Z"/><path class="line" d="M28 31C31 13 44 8 60 8s29 5 32 23H28Zm23 0-4 21h26l-4-21M43 21h.1M61 15h.1M78 23h.1"/>'),
+        "environmental-toxins": ('#ef8b7f', '<path class="fill" d="M49 10h22v10l15 27c2 4-1 7-5 7H39c-4 0-7-3-5-7l15-27Z"/><path class="line" d="M49 10h22m-17 0v12L38 49c-1 2 1 5 4 5h36c3 0 5-3 4-5L66 22V10M43 40h34m-25 6h.1m15-1h.1"/>'),
+    }
+    color, drawing = art.get(section, art["environmental-toxins"])
+    return f'<svg class="card-art" viewBox="0 0 120 60" aria-hidden="true" style="color:{color}">{drawing}</svg>'
+
 def browse_description(section):
     descriptions = {
         "snakes": "Venom, clinical effects, first aid and treatment context.",
@@ -199,7 +241,7 @@ def render_index(entries):
     for e in entries:
         sev_color = SEVERITY_COLOR.get(e.get("severity"), "#9c9c94")
         excerpt = (e.get("mechanism_of_toxicity") or "")[:110] + "…"
-        section = SECTION_SLUGS.get(e["slug"], "environmental-toxins")
+        section = entry_section(e)
         section_counts[section] += 1
         search_text = " ".join([
             e.get("common_name", ""), e.get("scientific_name", ""),
@@ -212,6 +254,7 @@ def render_index(entries):
   data-section="{section}"
   data-category="{html.escape(e.get('category', ''), quote=True)}"
   data-severity="{html.escape(e.get('severity', ''), quote=True)}">
+  {section_art(section)}
   <h3>{e['common_name']}</h3>
   <p class="sci">{e['scientific_name']}</p>
   <div class="badges">
@@ -270,6 +313,8 @@ def render_index(entries):
       <option value="venom">Venom</option>
       <option value="plant-toxin">Plant toxin</option>
       <option value="chemical">Chemical</option>
+      <option value="pesticide">Pesticide</option>
+      <option value="mushroom">Mushroom</option>
     </select>
   </div>
   <div class="field">
@@ -282,6 +327,10 @@ def render_index(entries):
       <option value="low">Low</option>
     </select>
   </div>
+  <label class="image-toggle" for="card-art-toggle">
+    <input id="card-art-toggle" type="checkbox">
+    <span>Show small images</span>
+  </label>
   <button class="clear-button" id="clear-filters" type="button">Clear</button>
 </div>
 <div class="grid" id="entry-grid">{cards}</div>
@@ -300,7 +349,7 @@ def render_index(entries):
 <section class="about-resource" id="about" aria-labelledby="about-title">
   <h2 id="about-title">About this rebuild</h2>
   <p>The former Clinical Toxinology Resources website was created as a searchable global reference covering venomous snakes, spiders, scorpions, marine organisms, poisonous plants and mushrooms, antivenoms, and clinical management. This independent example rebuild preserves that broad directory concept in a current, accessible interface.</p>
-  <p>It is not an official replacement, is not affiliated with the University of Adelaide or Women’s and Children’s Hospital, and currently contains only twelve demonstration entries. Historical context: <a href="https://www.mja.com.au/journal/2002/177/11/wwwtoxinologycom">Medical Journal of Australia overview</a>.</p>
+  <p>It is not an official replacement, is not affiliated with the University of Adelaide or Women’s and Children’s Hospital, and currently contains {len(entries)} demonstration entries. Historical context: <a href="https://www.mja.com.au/journal/2002/177/11/wwwtoxinologycom">Medical Journal of Australia overview</a>.</p>
 </section>
 <script>
 (() => {{
@@ -308,9 +357,18 @@ def render_index(entries):
   const section = document.querySelector('#section-filter');
   const category = document.querySelector('#category-filter');
   const severity = document.querySelector('#severity-filter');
+  const imageToggle = document.querySelector('#card-art-toggle');
   const cards = [...document.querySelectorAll('.card')];
   const count = document.querySelector('#result-count');
   const empty = document.querySelector('#empty-state');
+
+  function setCardImages(visible) {{
+    document.body.classList.toggle('show-card-art', visible);
+    imageToggle.checked = visible;
+  }}
+
+  try {{ setCardImages(localStorage.getItem('show-card-art') === 'true'); }}
+  catch (error) {{ setCardImages(false); }}
 
   function applyFilters() {{
     const query = search.value.trim().toLowerCase();
@@ -331,6 +389,10 @@ def render_index(entries):
   section.addEventListener('change', applyFilters);
   category.addEventListener('change', applyFilters);
   severity.addEventListener('change', applyFilters);
+  imageToggle.addEventListener('change', () => {{
+    setCardImages(imageToggle.checked);
+    try {{ localStorage.setItem('show-card-art', String(imageToggle.checked)); }} catch (error) {{}}
+  }});
   document.querySelector('#clear-filters').addEventListener('click', () => {{
     search.value = '';
     section.value = '';
