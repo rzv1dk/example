@@ -50,23 +50,24 @@ CSS = """
 :root{
   --bg:#0c0d0b; --surface:#16181a; --surface2:#1c1f1c; --border:#2b2e2a;
   --text:#eae7e0; --text2:#9c9c94; --accent:#7fd858; --amber:#e0a72e;
+  --page-width:1440px;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,Segoe UI,Inter,sans-serif;line-height:1.55}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-header{padding:28px 24px 8px;max-width:960px;margin:0 auto}
+header{padding:28px 24px 8px;max-width:var(--page-width);margin:0 auto}
 .brand{font-size:22px;font-weight:700;letter-spacing:.01em}
 .brand span{color:var(--accent)}
 .tagline{color:var(--text2);font-size:14px;margin-top:4px}
-.site-nav{max-width:960px;margin:12px auto 0;padding:0 24px;display:flex;gap:6px;flex-wrap:wrap}
+.site-nav{max-width:var(--page-width);margin:12px auto 0;padding:0 24px;display:flex;gap:6px;flex-wrap:wrap}
 .site-nav a{color:var(--text2);font-size:12px;padding:6px 9px;border-radius:7px;border:1px solid transparent}
 .site-nav a:hover{color:var(--text);border-color:var(--border);text-decoration:none;background:var(--surface)}
-.banner{max-width:960px;margin:16px auto 0;padding:10px 16px;
+.banner{max-width:calc(var(--page-width) - 48px);margin:16px auto 0;padding:10px 16px;
   background:#241d0f;border:1px solid var(--amber);border-radius:8px;
   color:var(--amber);font-size:13px}
-main{max-width:960px;margin:0 auto;padding:24px}
+main{max-width:var(--page-width);margin:0 auto;padding:24px}
 .emergency{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin-bottom:30px;
   padding:20px 22px;background:#211414;border:1px solid #8c453f;border-radius:12px}
 .eyebrow{margin:0 0 5px;color:#ef8b7f;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
@@ -108,8 +109,8 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;bord
   font-size:12px;font-weight:650;cursor:pointer;white-space:nowrap}
 .image-toggle:hover{border-color:var(--accent);color:var(--text)}
 .image-toggle input{width:18px;height:18px;margin:0;accent-color:var(--accent);cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px;align-items:stretch}
+.card{height:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;display:block}
 .card:hover{border-color:var(--accent);text-decoration:none}
 .card[hidden]{display:none}
 .card-art{display:none;width:100%;height:72px;margin:0 0 14px;border:1px solid var(--border);
@@ -145,7 +146,7 @@ body.show-card-art .card-art{display:block}
 .about-resource p{margin:0;color:var(--text2);font-size:13px}
 .about-resource p+p{margin-top:9px}
 ul{padding-left:20px}
-footer{max-width:960px;margin:40px auto 24px;padding:0 24px;color:var(--text2);font-size:12px}
+footer{max-width:var(--page-width);margin:40px auto 24px;padding:0 24px;color:var(--text2);font-size:12px}
 @media(max-width:720px){
   .emergency{grid-template-columns:1fr}
   .emergency-links{justify-content:flex-start}
